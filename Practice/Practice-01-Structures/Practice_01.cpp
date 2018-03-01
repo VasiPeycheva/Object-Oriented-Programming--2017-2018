@@ -1,20 +1,12 @@
 ﻿#include <iostream>
 
-// 1. Създаваме необходимата структура
-// 2. Как можем да достъпим членове, декларация
-// 3. Инициализация
-// 4. Извеждане на данни
-// 5. Заделяне на динамична структура.
-// 6. Въвеждане на данни, почистване на паметта.
-
-
 struct Point 
 {
 	int x;
 	int y;
 };
 
-void initializePoint(Point & point)
+void setPoint(Point & point)
 {
 	std::cin >> point.x;
 	std::cin >> point.y;
@@ -58,7 +50,7 @@ void initializePointArr(Point * arr,int size)
 {
 	for (size_t i = 0; i < size; i++)
 	{
-		initializePoint(arr[i]);
+		setPoint(arr[i]);
 	}
 }
 
