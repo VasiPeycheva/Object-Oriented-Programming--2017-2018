@@ -1,7 +1,14 @@
 #include <iostream>
 #include <fstream>
+#include <string.h>
 
 const std::size_t SIZE_BUFF = 256;
+
+enum Command {
+	write,
+	append,
+	read
+};
 
 bool writeInFile(const char *filename, const char * content) {
 	std::ofstream file;
@@ -94,17 +101,77 @@ bool readFromFile(const char *filename, char *&content) {
 
 bool fileExists(const char *filename) {
 	std::ifstream f(filename);
-    return f.good();
+	return f.good();
 }
 
-int main() {
-	char file[] = "example.txt";
-	writeInFile(file, "Pesho");
-	printFromFile(file);
+int main(int argc, char *argv[]) {
+	if (argc < 3 || argc > 4) {
+		std::cout <<
+			"Usage: " << argv[0] << " filename command [content]\n" <<
+			"\tfilename = the file with which to operate. Example: 'D:\\\\myfolder\\\\myfile.txt'\n" <<
+			"\tcommand  = commands are: 'write', 'read' and 'append'\n" <<
+			"\tcontent  = New content for the file. Optional argument for 'write' and 'append'" << std::endl;
+		return 1;
+	}
 
-	writeInFile(file, "Ivan");
-	char *content = nullptr;
-	readFromFile(file, content);
-	std::cout << content << std::endl;
-	return 0;
+	char
+		*filename = argv[1],
+		*command = argv[2],
+		*content = nullptr;
+
+	if (argv[3]) {
+		content = argv[3];
+	}
+
+	Command filecmd;
+	if (!strcmp(command, "write")) {
+		if (!content) {
+			std::cerr << "Needs content argument when writing!" << std::endl;
+			return 1;
+		}
+
+		filecmd = Command::write;
+	} else if (!strcmp(command, "append")) {
+		if (!content) {
+			std::cerr << "Needs content argument when appending!" << std::endl;
+			return 1;
+		}
+
+		filecmd = Command::append;
+	} else if (!strcmp(command, "read")) {
+		if (content) {
+			std::cout << "No need for content argument when reading!" << std::endl;
+		}
+
+		filecmd = Command::read;
+	} else {
+		std::cerr << "Wrong command! Commands are: 'write', 'read' and 'append'" << std::endl;
+		return 1;
+	}
+
+	if (!fileExists(filename)) {
+		std::cerr << "File '" << filename << "' DOESN'T exists!" << std::endl;
+		return 1;
+	}
+
+	bool ok = false;
+	switch (filecmd) {
+	case Command::write:
+		ok = writeInFile(filename, content);
+		std::cout << "Written to file!" << std::endl;
+		break;
+	case Command::append:
+		ok = appendToFile(filename, content);
+		std::cout << "Appended to file!" << std::endl;
+		break;
+	case Command::read:
+		std::cout << "File content:" << std::endl;
+		ok = printFromFile(filename);
+		break;
+	}
+
+	if (ok)
+		return 0;
+	else
+		return 1;
 }
