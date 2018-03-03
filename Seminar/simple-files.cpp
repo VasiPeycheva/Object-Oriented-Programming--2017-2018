@@ -92,6 +92,10 @@ bool readFromFile(const char *filename, char *&content) {
 	return true;
 }
 
+bool fileExists(const char *filename) {
+	std::ifstream f(filename);
+    return f.good();
+}
 
 int main() {
 	char file[] = "example.txt";
