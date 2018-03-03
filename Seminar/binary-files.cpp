@@ -28,6 +28,25 @@ bool writeHuman(const char *filename, const Human &h) {
 	return true;
 }
 
+bool readHuman(const char *filename, Human &h) {
+	std::ifstream file (filename, std::ios::in | std::ios::binary);
+	if ( !file.good() ) {
+		std::cerr << "Coudln't open file!" << std::endl;
+		return false;
+	}
+
+	Human tempH;
+	file.read((char*)&tempH, sizeof(tempH));
+	if ( file.bad() ) {
+		std::cerr << "Loading of struct Human from file failed" << std::endl;
+		return false;
+	}
+
+	h = tempH;
+	file.close();
+	return true;
+}
+
 bool fileExists(const char *filename) {
 	std::ifstream f(filename);
     return f.good();
@@ -45,7 +64,18 @@ int main() {
 	const char filename[] = "human-dump.bin";
 
 	Human pesho;
-
+	if ( fileExists(filename) ) {
+		std::cout << "File with Human exists!\n Reading struct..." << std::endl;
+		readHuman(filename, pesho);
+	} else {
+		std::cout << "File with Human DOESN'T exists!\n Writing struct in file..." << std::endl;
+		char name[] = "Pesho";
+		strncpy(pesho.name, name, strlen(name));
+		pesho.age = 42;
+		pesho.hasCat = true;
+		writeHuman(filename, pesho);
+	}
+	
 	printHuman(pesho);
 	return 0;
 }
