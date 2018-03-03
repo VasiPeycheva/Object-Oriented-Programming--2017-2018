@@ -48,8 +48,41 @@ bool printFromFile(const char* filename) {
 	return true;
 }
 
+bool readFromFile(const char *filename, char *&content) {
+	std::ifstream file(filename);
+	if (! file.good()) {
+		std::cerr << "Couldn't open file: " << filename << std::endl;
+		return false;
+	}
+
+	file.seekg(0, std::ios::end);
+	std::size_t sizeFile = file.tellg();
+	file.seekg(0, std::ios::beg);
+
+	char *contentTemp = new char[sizeFile];
+	file.read(contentTemp, sizeFile);
+	if ( file.bad() ) {
+		std::cerr << "Failed reading from file: " << filename << std::endl;
+		return false;
+	}
+	file.close();
+
+	if (content) {
+		delete [] content;
+	}
+	content = contentTemp;
+	return true;
+}
+
+
 int main() {
-	writeInFile("example.txt", "Pesho");
-	printFromFile("example.txt");
+	char file[] = "example.txt";
+	writeInFile(file, "Pesho");
+	printFromFile(file);
+
+	writeInFile(file, "Ivan");
+	char *content = nullptr;
+	readFromFile(file, content);
+	std::cout << content << std::endl;
 	return 0;
 }
