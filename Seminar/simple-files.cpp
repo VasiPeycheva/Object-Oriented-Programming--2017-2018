@@ -25,6 +25,24 @@ bool writeInFile(const char *filename, const char * content) {
 	return true;
 }
 
+bool appendToFile(const char *filename, const char *newContent) {
+	std::ofstream file;
+	file.open (filename, std::ios::app);
+	if ( !file.good() ) {
+		std::cerr << "Couldn't open file: " << filename << std::endl;
+		return false;
+	}
+
+	file << newContent;
+	if ( file.bad() ) {
+		std::cerr << "Failed when writing in file: " << filename << std::endl;
+		return false;
+	}
+
+	file.close();
+	return true;
+}
+
 bool printFromFile(const char* filename) {
 	char line[SIZE_BUFF];
 	std::ifstream file (filename);
