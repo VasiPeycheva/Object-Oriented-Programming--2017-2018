@@ -27,9 +27,25 @@ bool writeHuman(const char *filename, const Human &h) {
 	file.close();
 	return true;
 }
+
+bool fileExists(const char *filename) {
+	std::ifstream f(filename);
+    return f.good();
+}
+
+void printHuman(const Human &h) {
+	std::cout << 
+			"Human {\n\tname: " << h.name << 
+			"\n\tage: " << h.age << 
+			"\n\thas a cat: " << h.hasCat << 
+			"\n}" << std::endl;
+}
+
 int main() {
 	const char filename[] = "human-dump.bin";
 
 	Human pesho;
+
+	printHuman(pesho);
 	return 0;
 }
