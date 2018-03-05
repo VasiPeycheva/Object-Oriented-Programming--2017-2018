@@ -1,0 +1,15 @@
+# Ignore compiled files
+*.out
+*.o
+*.obj
+*.gch
+*.exe
+*.dll
+
+# Ignore swapfiles
+*.swp
+*~
+
+# Ignore VS project files
+*.vcproj
+*.sln
