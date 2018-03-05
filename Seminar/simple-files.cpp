@@ -1,3 +1,18 @@
+/*
+ * This is a program that uses command line arguments to interact with text files.
+ *
+ * Its arguments are:
+ * 	- the filename of the file with which it operates
+ * 	- command, that dictates what will it do with the file. Commands: write, read, append
+ * 	- text, which is used only if the commands are 'write' or 'append', and is the new content, that is written to the file.
+ * 
+ * If the command is 'read' it prints the content of the file to stdout.
+ * If it is 'write', then the current content of the file is discated and the new content(given as argument) is placed there.
+ * If it is 'append', the new content is added at the end of the file, without deleting old content.
+ *
+ * NOTE: If you spot a mistake, submit a pull request with the fix to the repo.
+*/
+
 #include <iostream>
 #include <fstream>
 #include <string.h>
