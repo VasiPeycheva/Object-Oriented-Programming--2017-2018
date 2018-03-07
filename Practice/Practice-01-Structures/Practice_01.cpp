@@ -73,5 +73,7 @@ int main()
 
 	std::cout << "The distance between the points is: " << distance(arr[0], arr[1]) << std::endl;
 
+	delete[] arr;
+	
 	return 0;
 }
