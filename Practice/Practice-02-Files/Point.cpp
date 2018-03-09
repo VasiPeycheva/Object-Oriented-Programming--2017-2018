@@ -195,5 +195,7 @@ int main()
 	//read data from binary file
 	deserialization(size, pointsFileBin);
 
+
+	delete[] arr;
 	return 0;
 }
