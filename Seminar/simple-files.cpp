@@ -113,25 +113,25 @@ bool readFromFile(const char *filename, char *&content) {
 	}
 	file.close();
 
-	if (content) {
-		delete [] content;
-	}
+	// Assigning when we are sure all oprations don't fail
 	content = contentTemp;
 	return true;
 }
 
 bool fileExists(const char *filename) {
 	std::ifstream f(filename);
-	return f.good();
+	bool exists = f.good();
+	f.close();
+	return exists;
 }
 
 int main(int argc, char *argv[]) {
-	if (argc < 3 || argc > 4) {
+	if ( argc < 3 || argc > 4 ) {
 		std::cout <<
-			"Usage: " << argv[0] << " filename command [content]\n" <<
-			"\tfilename = the file with which to operate. Example: 'D:\\\\myfolder\\\\myfile.txt'\n" <<
-			"\tcommand  = commands are: 'write', 'read' and 'append'\n" <<
-			"\tcontent  = New content for the file. Optional argument for 'write' and 'append'" << std::endl;
+			"\nUsage: " << argv[0] << " filename command [content]\n" <<
+			"\t- filename = File with which to operate. Example: 'D:\\\\myfolder\\\\myfile.txt'\n" <<
+			"\t- command  = Commands are: 'write', 'read' and 'append'\n" <<
+			"\t- content  = New content for the file. Optional argument for 'write' and 'append'\n" << std::endl;
 		return 1;
 	}
 
