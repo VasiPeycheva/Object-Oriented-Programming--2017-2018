@@ -99,7 +99,13 @@ bool readFromFile(const char *filename, char *&content) {
 	std::size_t sizeFile = file.tellg();
 	file.seekg(0, std::ios::beg);
 
-	char *contentTemp = new char[sizeFile];
+	char *contentTemp = new (std::nothrow) char[sizeFile];
+	if (! contentTemp ) {
+		file.close();
+		std::cerr << "Failed to allocate space for file content: " << filename << std::endl;
+		return false;
+	}
+
 	file.read(contentTemp, sizeFile);
 	if ( file.bad() ) {
 		std::cerr << "Failed reading from file: " << filename << std::endl;
