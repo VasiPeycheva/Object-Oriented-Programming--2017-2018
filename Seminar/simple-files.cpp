@@ -69,7 +69,7 @@ bool printFromFile(const char* filename) {
 	char line[SIZE_BUFF];
 	std::ifstream file (filename);
 
-	if (! file.good()) {
+	if (! file.good() ) {
 		std::cerr << "Couldn't open file: " << filename << std::endl;
 		return false;
 	}
@@ -80,7 +80,6 @@ bool printFromFile(const char* filename) {
 			std::cerr << "Failed reading from file: " << filename << std::endl;
 			return false;
 		}
-
 		std::cout << line << std::endl;
 	}
 
@@ -90,7 +89,7 @@ bool printFromFile(const char* filename) {
 
 bool readFromFile(const char *filename, char *&content) {
 	std::ifstream file(filename);
-	if (! file.good()) {
+	if (! file.good() ) {
 		std::cerr << "Couldn't open file: " << filename << std::endl;
 		return false;
 	}
@@ -140,26 +139,27 @@ int main(int argc, char *argv[]) {
 		*command = argv[2],
 		*content = nullptr;
 
-	if (argv[3]) {
+	// Only if third command-line argument exists
+	if ( argv[3] ) {
 		content = argv[3];
 	}
 
 	Command filecmd;
-	if (!strcmp(command, "write")) {
+	if (! strcmp(command, "write") ) {
 		if (!content) {
 			std::cerr << "Needs content argument when writing!" << std::endl;
 			return 1;
 		}
 
 		filecmd = Command::write;
-	} else if (!strcmp(command, "append")) {
+	} else if (! strcmp(command, "append") ) {
 		if (!content) {
 			std::cerr << "Needs content argument when appending!" << std::endl;
 			return 1;
 		}
 
 		filecmd = Command::append;
-	} else if (!strcmp(command, "read")) {
+	} else if (! strcmp(command, "read") ) {
 		if (content) {
 			std::cout << "No need for content argument when reading!" << std::endl;
 		}
@@ -170,29 +170,30 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	if (!fileExists(filename)) {
+	if (! fileExists(filename) && filecmd == Command::read) {
 		std::cerr << "File '" << filename << "' DOESN'T exists!" << std::endl;
 		return 1;
 	}
 
-	bool ok = false;
-	switch (filecmd) {
+	bool operationSuccess = false;
+	switch ( filecmd ) {
 	case Command::write:
-		ok = writeInFile(filename, content);
+		operationSuccess = writeInFile(filename, content);
 		std::cout << "Written to file!" << std::endl;
 		break;
 	case Command::append:
-		ok = appendToFile(filename, content);
+		operationSuccess = appendToFile(filename, content);
 		std::cout << "Appended to file!" << std::endl;
 		break;
 	case Command::read:
 		std::cout << "File content:" << std::endl;
-		ok = printFromFile(filename);
+		operationSuccess = printFromFile(filename);
 		break;
 	}
 
-	if (ok)
+	if ( operationSuccess ) {
 		return 0;
-	else
+	} else {
 		return 1;
+	}
 }
