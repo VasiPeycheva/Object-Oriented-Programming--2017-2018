@@ -27,7 +27,7 @@ enum Command {
 
 bool writeInFile(const char *filename, const char * content) {
 	std::ofstream file;
-	file.open (filename);
+	file.open (filename, std::ios::out | std::ios::trunc);
 
 	// Checking if file has opened
 	if ( !file.good() ) {
@@ -49,8 +49,8 @@ bool writeInFile(const char *filename, const char * content) {
 
 bool appendToFile(const char *filename, const char *newContent) {
 	std::ofstream file;
-	file.open (filename, std::ios::app);
-	if ( !file.good() ) {
+	file.open (filename, std::ios::out | std::ios::app);
+	if (! file.good() ) {
 		std::cerr << "Couldn't open file: " << filename << std::endl;
 		return false;
 	}
@@ -69,7 +69,7 @@ bool printFromFile(const char* filename) {
 	char line[SIZE_BUFF];
 	std::ifstream file (filename);
 
-	if (! file.good()) {
+	if (! file.good() ) {
 		std::cerr << "Couldn't open file: " << filename << std::endl;
 		return false;
 	}
@@ -80,7 +80,6 @@ bool printFromFile(const char* filename) {
 			std::cerr << "Failed reading from file: " << filename << std::endl;
 			return false;
 		}
-
 		std::cout << line << std::endl;
 	}
 
@@ -90,7 +89,7 @@ bool printFromFile(const char* filename) {
 
 bool readFromFile(const char *filename, char *&content) {
 	std::ifstream file(filename);
-	if (! file.good()) {
+	if (! file.good() ) {
 		std::cerr << "Couldn't open file: " << filename << std::endl;
 		return false;
 	}
@@ -99,7 +98,13 @@ bool readFromFile(const char *filename, char *&content) {
 	std::size_t sizeFile = file.tellg();
 	file.seekg(0, std::ios::beg);
 
-	char *contentTemp = new char[sizeFile];
+	char *contentTemp = new (std::nothrow) char[sizeFile];
+	if (! contentTemp ) {
+		file.close();
+		std::cerr << "Failed to allocate space for file content: " << filename << std::endl;
+		return false;
+	}
+
 	file.read(contentTemp, sizeFile);
 	if ( file.bad() ) {
 		std::cerr << "Failed reading from file: " << filename << std::endl;
@@ -107,25 +112,25 @@ bool readFromFile(const char *filename, char *&content) {
 	}
 	file.close();
 
-	if (content) {
-		delete [] content;
-	}
+	// Assigning when we are sure all oprations don't fail
 	content = contentTemp;
 	return true;
 }
 
 bool fileExists(const char *filename) {
 	std::ifstream f(filename);
-	return f.good();
+	bool exists = f.good();
+	f.close();
+	return exists;
 }
 
 int main(int argc, char *argv[]) {
-	if (argc < 3 || argc > 4) {
+	if ( argc < 3 || argc > 4 ) {
 		std::cout <<
-			"Usage: " << argv[0] << " filename command [content]\n" <<
-			"\tfilename = the file with which to operate. Example: 'D:\\\\myfolder\\\\myfile.txt'\n" <<
-			"\tcommand  = commands are: 'write', 'read' and 'append'\n" <<
-			"\tcontent  = New content for the file. Optional argument for 'write' and 'append'" << std::endl;
+			"\nUsage: " << argv[0] << " filename command [content]\n" <<
+			"\t- filename = File with which to operate. Example: 'D:\\\\myfolder\\\\myfile.txt'\n" <<
+			"\t- command  = Commands are: 'write', 'read' and 'append'\n" <<
+			"\t- content  = New content for the file. Optional argument for 'write' and 'append'\n" << std::endl;
 		return 1;
 	}
 
@@ -134,26 +139,27 @@ int main(int argc, char *argv[]) {
 		*command = argv[2],
 		*content = nullptr;
 
-	if (argv[3]) {
+	// Only if third command-line argument exists
+	if ( argv[3] ) {
 		content = argv[3];
 	}
 
 	Command filecmd;
-	if (!strcmp(command, "write")) {
+	if (! strcmp(command, "write") ) {
 		if (!content) {
 			std::cerr << "Needs content argument when writing!" << std::endl;
 			return 1;
 		}
 
 		filecmd = Command::write;
-	} else if (!strcmp(command, "append")) {
+	} else if (! strcmp(command, "append") ) {
 		if (!content) {
 			std::cerr << "Needs content argument when appending!" << std::endl;
 			return 1;
 		}
 
 		filecmd = Command::append;
-	} else if (!strcmp(command, "read")) {
+	} else if (! strcmp(command, "read") ) {
 		if (content) {
 			std::cout << "No need for content argument when reading!" << std::endl;
 		}
@@ -164,29 +170,30 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	if (!fileExists(filename)) {
+	if (! fileExists(filename) && filecmd == Command::read) {
 		std::cerr << "File '" << filename << "' DOESN'T exists!" << std::endl;
 		return 1;
 	}
 
-	bool ok = false;
-	switch (filecmd) {
+	bool operationSuccess = false;
+	switch ( filecmd ) {
 	case Command::write:
-		ok = writeInFile(filename, content);
+		operationSuccess = writeInFile(filename, content);
 		std::cout << "Written to file!" << std::endl;
 		break;
 	case Command::append:
-		ok = appendToFile(filename, content);
+		operationSuccess = appendToFile(filename, content);
 		std::cout << "Appended to file!" << std::endl;
 		break;
 	case Command::read:
 		std::cout << "File content:" << std::endl;
-		ok = printFromFile(filename);
+		operationSuccess = printFromFile(filename);
 		break;
 	}
 
-	if (ok)
+	if ( operationSuccess ) {
 		return 0;
-	else
+	} else {
 		return 1;
+	}
 }
