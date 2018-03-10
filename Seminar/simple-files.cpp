@@ -27,7 +27,7 @@ enum Command {
 
 bool writeInFile(const char *filename, const char * content) {
 	std::ofstream file;
-	file.open (filename);
+	file.open (filename, std::ios::out | std::ios::trunc);
 
 	// Checking if file has opened
 	if ( !file.good() ) {
@@ -49,8 +49,8 @@ bool writeInFile(const char *filename, const char * content) {
 
 bool appendToFile(const char *filename, const char *newContent) {
 	std::ofstream file;
-	file.open (filename, std::ios::app);
-	if ( !file.good() ) {
+	file.open (filename, std::ios::out | std::ios::app);
+	if (! file.good() ) {
 		std::cerr << "Couldn't open file: " << filename << std::endl;
 		return false;
 	}
