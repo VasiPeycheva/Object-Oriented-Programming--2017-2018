@@ -5,6 +5,7 @@
 void readName(char[], unsigned short);
 
 //help functions for finding the most common card
-
+void countingSort(unsigned int[], const unsigned short []);
+unsigned short getMostCommonID(unsigned int[], unsigned short);
 
 #endif // !__HELP__FUNCTITONS__HEADER__INCLUDED__
