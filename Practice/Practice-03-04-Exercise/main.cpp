@@ -1,15 +1,5 @@
 /**********************************************
 *
-* Solution to homework task
-* Object-Oriented Programming Course
-* Faculty of Mathematics and Informatics of Sofia University
-* Summer semester 2015/2016
-*
-* @author Vasilena Peycheva
-* @idnumber 45139
-* @task 1
-* @compiler VC
-*
 * available commands: 
 * - cp: create player by given name 
 * - cc: create card by given color (supported colors: red, black, blue, white, green) and name
