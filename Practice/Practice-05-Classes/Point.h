@@ -1,18 +1,25 @@
-#ifndef __POINT__
-#define __POINT__
+#ifndef __POINT__HEADER__INCLUDED__
+#define __POINT__HEADER__INCLUDED__
 
 class Point
 {
 public:
-	Point();
-	Point(int x, int y);
-	~Point();
-	void setX(int x);
-	void setY(int y);
+	//Big 4
+	Point(); // Default constructor with no arguments
+	Point(int x, int y); //Constructor
+	Point(const Point&); //Copy constructor
+	Point& operator=(const Point &); //Copy assignment operator
+	~Point();  //Destructor
+
+	void setX(int);
+	void setY(int);
+
 	const int getX() const;
 	const int getY() const;
-	void print() const; // we will use it for the tests, then we will delete it 
+
+	void print() const;
 	void translate(int horizontal, int vertical);
+
 private:
 	int x;
 	int y;

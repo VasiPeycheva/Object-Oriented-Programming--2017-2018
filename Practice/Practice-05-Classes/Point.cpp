@@ -13,6 +13,23 @@ Point::Point(int x, int y)
 	,y(y)
 {}
 
+Point::Point(const Point & point)
+{
+	x = point.x;
+	y = point.y;
+}
+
+Point & Point::operator=(const Point & point)
+{
+	if (this != &point) 
+	{
+		x = point.x;
+		y = point.y;
+	}
+
+	return *this; // we return the object itself
+}
+
 Point::~Point()
 {}
 
@@ -25,6 +42,7 @@ void Point::setY(int Y)
 {
 	y = Y;
 }
+
 const int Point::getX() const
 {
 	return x;
@@ -41,8 +59,11 @@ void Point::print() const
 	cout << "y: " << y << endl;
 }
 
+//h is for horizontal
+//v is for vertical
 void Point::translate(int h, int v)
 {
 	x = x + h;
 	y = y + v;
 }
+
