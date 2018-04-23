@@ -4,7 +4,8 @@
 #include "Point.h"
 #include "Color.h"
 
-class Circle {
+class Circle 
+{
 public:
 	Circle(Point center, int radius, Color circleColor);
 	~Circle();
