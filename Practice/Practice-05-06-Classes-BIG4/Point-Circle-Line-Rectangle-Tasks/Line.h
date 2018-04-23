@@ -7,14 +7,8 @@
 class Line
 {
 public:
-	Line();
 	Line(Point, Point, Color);
-	Line(const Line &);
-	Line& operator=(const Line &);
 	~Line();
-
-	void setA(const Point &);
-	void setB(const Point &);
 
 	void translate(int horizontal, int vertical);
 	const void print() const;

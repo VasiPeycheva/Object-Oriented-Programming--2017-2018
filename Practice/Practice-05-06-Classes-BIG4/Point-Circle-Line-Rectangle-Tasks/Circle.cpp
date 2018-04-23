@@ -3,18 +3,12 @@
 
 using namespace std;
 
-Circle::Circle() 
-	:center(0,0)
-	,radius(0)
-	,circleColor(INVALID_COLOR)
-{}
 
 Circle::Circle(Point Oxy, int rad, Color cirColor)
-{
-	center = Oxy;
-	radius = rad;
-	circleColor = cirColor;
-}
+	:center(Oxy)
+	,radius(rad)
+	,circleColor(circleColor)
+{}
 
 Circle::~Circle()
 {}

@@ -6,7 +6,6 @@
 
 class Circle {
 public:
-	Circle();
 	Circle(Point center, int radius, Color circleColor);
 	~Circle();
 

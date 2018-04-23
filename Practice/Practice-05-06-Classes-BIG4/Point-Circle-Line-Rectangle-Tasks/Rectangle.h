@@ -7,7 +7,6 @@
 class Rectangle
 {
 public:
-	Rectangle();
 	Rectangle(Point OxOy, int recWidth, int recHeight, Color recColor);
 	~Rectangle();
 
