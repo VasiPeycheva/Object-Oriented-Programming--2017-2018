@@ -3,7 +3,8 @@
 
 const int maxColorSize = 16;
 
-enum Color {
+enum Color
+{
 	INVALID_COLOR = -1,
 
 	BLACK,
