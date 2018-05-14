@@ -21,16 +21,6 @@ Student::Student(const Student & other)
 	copy(other);
 }
 
-Student & Student::operator=(const Student & other)
-{
-	if (this != &other) 
-	{
-		Person::operator=(other);
-		clean();
-		copy(other);
-	}
-	return *this;
-}
 
 Student::~Student()
 {
