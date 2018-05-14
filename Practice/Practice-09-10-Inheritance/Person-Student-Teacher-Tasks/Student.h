@@ -9,7 +9,6 @@ public:
 	Student(const char * name,const int birthYear, 
 			const char * universityName, const char * courseName, int fn);
 	Student(const Student & other);
-	Student& operator=(const Student & other);
 	~Student();
 
 	void printInformation() const;
