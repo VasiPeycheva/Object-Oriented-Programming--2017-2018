@@ -16,8 +16,7 @@ public:
 
 	const TemperatureSensor getSensor(unsigned int) const;
 	void addSensor(const TemperatureSensor&);
-	void updateSensor(unsigned int, float);
-
+	
 	float getCurrentTemperature() const;
 
 private:
